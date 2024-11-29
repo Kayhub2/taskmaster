@@ -4,6 +4,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskForm = document.getElementById('taskForm');
     const taskList = document.getElementById('taskList');
     const searchForm = document.getElementById('searchForm');
+    const feedback = document.getElementById('feedback');
+
+    const showFeedback = (message, type = 'success') => {
+        if (feedback) {
+            feedback.textContent = message;
+            feedback.className = type;
+            setTimeout(() => {
+                feedback.textContent = '';
+                feedback.className = '';
+            }, 3000);
+        }
+    };
 
     const addTaskToList = (task) => {
         const li = document.createElement('li');
@@ -20,8 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 li.remove();
+                showFeedback('Task deleted successfully');
             } else {
                 console.error('Task deletion failed');
+                showFeedback('Task deletion failed', 'error');
             }
         });
         li.appendChild(deleteButton);
@@ -34,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            const response = await fetch('/api/users/register', {
+            const response = await fetch('http://localhost:8081/api/users/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -46,8 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
                 localStorage.setItem('token', data.token);
                 window.location.href = '/tasks';
+                showFeedback('Registration successful');
             } else {
                 console.error('Registration failed');
+                showFeedback('Registration failed', 'error');
             }
         });
     }
@@ -58,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            const response = await fetch('/api/users/login', {
+            const response = await fetch('http://localhost:8081/api/users/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -70,8 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
                 localStorage.setItem('token', data.token);
                 window.location.href = '/tasks';
+                showFeedback('Login successful');
             } else {
                 console.error('Login failed');
+                showFeedback('Login failed', 'error');
             }
         });
     }
@@ -84,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const deadline = document.getElementById('deadline').value;
             const priority = document.getElementById('priority').value;
 
-            const response = await fetch('/api/tasks', {
+            const response = await fetch('http://localhost:8081/api/tasks', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,13 +115,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const task = await response.json();
                 addTaskToList(task);
                 taskForm.reset();
+                showFeedback('Task added successfully');
             } else {
                 console.error('Task creation failed');
+                showFeedback('Task creation failed', 'error');
             }
         });
 
         const loadTasks = async () => {
-            const response = await fetch('/api/tasks', {
+            const response = await fetch('http://localhost:8081/api/tasks', {
                 headers: {
                     'x-auth-token': localStorage.getItem('token')
                 }
@@ -114,6 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tasks.forEach(addTaskToList);
             } else {
                 console.error('Failed to load tasks');
+                showFeedback('Failed to load tasks', 'error');
             }
         };
 
@@ -126,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const query = document.getElementById('searchQuery').value;
             const priority = document.getElementById('searchPriority').value;
 
-            const response = await fetch(`/api/tasks/search?query=${query}&priority=${priority}`, {
+            const response = await fetch(`http://localhost:8081/api/tasks/search?query=${query}&priority=${priority}`, {
                 headers: {
                     'x-auth-token': localStorage.getItem('token')
                 }
@@ -136,8 +157,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const tasks = await response.json();
                 taskList.innerHTML = '';
                 tasks.forEach(addTaskToList);
+                showFeedback('Search completed successfully');
             } else {
                 console.error('Failed to search tasks');
+                showFeedback('Failed to search tasks', 'error');
             }
         });
     }

@@ -6,6 +6,7 @@ import cors from 'cors';
 import connectDB from './db.js';
 import userRoutes from './routes/userRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
+import helmet from 'helmet';
 
 const app = express();
 
@@ -13,6 +14,7 @@ const app = express();
 connectDB();
 
 // Middleware
+app.use(helmet()); // Security headers
 app.use(bodyParser.json());
 app.use(cors()); // Enable CORS
 
@@ -40,6 +42,12 @@ app.get('/login', (req, res) => {
 
 app.get('/tasks', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/tasks.html'));
+});
+
+// Basic error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
 });
 
 // Start the server

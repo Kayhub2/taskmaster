@@ -1,17 +1,23 @@
 import express from 'express';
 import { register, login } from '../controllers/userController.js';
-import { body } from 'express-validator';
+import { body, validationResult } from 'express-validator';
 
 const router = express.Router();
 
-router.post('/register', [
+const validateUser = [
     body('username').isAlphanumeric().withMessage('Username must be alphanumeric'),
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
-], register);
+];
 
-router.post('/login', [
-    body('username').isAlphanumeric().withMessage('Username must be alphanumeric'),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
-], login);
+const handleValidationErrors = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+};
+
+router.post('/register', validateUser, handleValidationErrors, register);
+router.post('/login', validateUser, handleValidationErrors, login);
 
 export default router;

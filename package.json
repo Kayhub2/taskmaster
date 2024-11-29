@@ -2,10 +2,11 @@
   "name": "taskmaster",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "backend/app.js",
   "type": "module",
   "scripts": {
-    "start": "node backend/app.js"
+    "start": "node backend/app.js",
+    "build": "npm run build --prefix frontend"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

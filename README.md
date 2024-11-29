@@ -22,5 +22,5 @@ TaskMaster is a simple task management application that allows users to register
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/taskmaster.git
+git clone https://github.com/Kayhub2/taskmaster.git
 "# taskmaster" 
