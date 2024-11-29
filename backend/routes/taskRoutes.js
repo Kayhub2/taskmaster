@@ -1,7 +1,7 @@
 import express from 'express';
-import { getTasks, createTask, updateTask, deleteTask, searchTasks } from '../controllers/taskController.js';
+import { getTasks, createTask, updateTask, deleteTask, searchTasks } from '../backend/controllers/taskController.js';
 import { body } from 'express-validator';
-import auth from '../middleware/auth.js';
+import auth from '../backend/middleware/auth.js';
 
 const router = express.Router();
 

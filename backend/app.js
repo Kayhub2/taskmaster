@@ -3,9 +3,9 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
-import connectDB from './db.js';
-import userRoutes from './routes/userRoutes.js';
-import taskRoutes from './routes/taskRoutes.js';
+import connectDB from '../config/db.js';
+import userRoutes from '../api/userRoutes.js';
+import taskRoutes from '../api/taskRoutes.js';
 import helmet from 'helmet';
 
 const app = express();
